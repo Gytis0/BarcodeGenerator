@@ -1,0 +1,53 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:xct="clr-namespace:Avalonia.Controls;assembly=Avalonia.Controls"
+        xmlns:vm="using:UI.ViewModels"
+        x:Class="UI.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Width="400"
+        Height="500"
+        Title="Barcode Generator">
+
+    <StackPanel Margin="20" Spacing="10">
+
+        <TextBlock Text="'Tab' to go to next field"
+                   FontSize="12"
+                   FontStyle="Italic"/>
+
+        <TextBlock Text="'Shift+Tab' to go to previous field"
+                   FontSize="12"
+                   FontStyle="Italic"/>
+
+        <TextBlock Text="Barcode Count" />
+        <TextBox TextChanged="OnTextChanged_ClearStrings"
+                 Text="{Binding BarcodeCount}"/>
+
+        <TextBlock Text="Bases Length" />
+        <TextBox TextChanged="OnTextChanged_ClearStrings"
+                 Text="{Binding BasesLength}"/>
+
+        <TextBlock Text="Anti-Complementary Length" />
+        <TextBox TextChanged="OnTextChanged_ClearStrings"
+                 Text="{Binding AntiComplementaryLength}"/>
+
+        <TextBlock Text="GC Percentage" />
+        <TextBox TextChanged="OnTextChanged_ClearStrings"
+                 Text="{Binding Percentage}"/>
+
+        <StackPanel Spacing="10">
+            <Button Content="Select folder" 
+                    Click="OpenFileButton_Clicked"/>
+        </StackPanel>
+
+        <Button Content="Generate"
+                Focusable="False"
+                Command="{Binding GenerateCommand}"
+                HorizontalAlignment="Left"/>
+
+        <TextBlock Text="{Binding Status}"
+                   Focusable="False"
+                   Height="40"/>
+
+    </StackPanel>
+
+</Window>
