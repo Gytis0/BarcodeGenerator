@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using System.Diagnostics;
@@ -22,7 +23,6 @@ namespace UI.Views
 			tb.CaretIndex = tb.Text.Length;
 		}
 
-		// TODO : Put the openfilebutton next to the field for the path. Also, put in an icon of a folder instead of just raw text
 		private async void OpenFileButton_Clicked(object sender, RoutedEventArgs args)
 		{
 			var topLevel = GetTopLevel(this);
@@ -34,9 +34,7 @@ namespace UI.Views
 			});
 
 			if (folders.Count >= 1)
-			{
-				Debug.WriteLine(folders[0].Path);
-			}
+				FolderPathBox.Text = folders[0].Path.LocalPath;
 		}
 	}
 }

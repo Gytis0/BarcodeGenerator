@@ -1,9 +1,8 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Data.Core;
-using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
-using System.Linq;
+using System;
+using System.IO;
 using UI.ViewModels;
 using UI.Views;
 
@@ -11,6 +10,14 @@ namespace UI
 {
 	public partial class App : Application
 	{
+		public App()
+		{
+			AppDomain.CurrentDomain.UnhandledException += (s, e) =>
+			{
+				File.WriteAllText(Path.Combine(AppContext.BaseDirectory, "latestCrash.txt"), e.ExceptionObject.ToString());
+			};
+		}
+
 		public override void Initialize()
 		{
 			AvaloniaXamlLoader.Load(this);

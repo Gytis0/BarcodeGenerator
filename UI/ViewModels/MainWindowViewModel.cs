@@ -1,6 +1,8 @@
 ﻿using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Core;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using UI.Attributes;
@@ -37,7 +39,7 @@ public partial class MainWindowViewModel : ObservableValidator
 	private string excelPath = "";
 
 	[ObservableProperty]
-	private string folderPath = "";
+	private string folderPath = AppContext.BaseDirectory;
 
 	[ObservableProperty]
 	private string status = "";
@@ -53,13 +55,31 @@ public partial class MainWindowViewModel : ObservableValidator
 	}
 
 	[RelayCommand]
-	private void Generate()
+	private async Task Generate()
 	{
+		Status = "";
 		ValidateAllProperties();
 
-		if (HasErrors)
-			return;
+		if (HasErrors) return;
 
-		Status = "Generated!";
+		try
+		{
+			var options = new SequenceOptions(int.Parse(BarcodeCount), int.Parse(BasesLength), int.Parse(AntiComplementaryLength), int.Parse(Percentage), FolderPath);
+
+			Status = "Generating...";
+			string[] sequences = await Task.Run(() => Generator.GenerateSequences(options));
+
+			Status = "Saving...";
+			await Task.Run(() => ExcelHelper.Create(sequences, FolderPath));
+
+			Status = "Generated and saved!";
+
+			await Task.Delay(3000);
+			Status = "";
+		}
+		catch (Exception ex)
+		{
+			Status = string.Format("Could not generate sequences: {0}", ex.Message);
+		}
 	}
 }

@@ -1,53 +1,90 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:xct="clr-namespace:Avalonia.Controls;assembly=Avalonia.Controls"
         xmlns:vm="using:UI.ViewModels"
         x:Class="UI.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-        Width="400"
-        Height="500"
+        XYFocus.NavigationModes="Keyboard"
+        Width="460"
+        MinWidth="460"
+        Height="400"
+        MinHeight="400"
+        MaxHeight="400"
+        Icon="/Assets/rna.ico"
         Title="Barcode Generator">
 
-    <StackPanel Margin="20" Spacing="10">
+    <Grid Margin="20"
+          RowDefinitions="Auto,Auto,Auto,Auto,*"
+          RowSpacing="15">
 
-        <TextBlock Text="'Tab' to go to next field"
+        <TextBlock Grid.Row="0"
+                   Text="'Tab', 'Shift+Tab' or 'Arrow keys' to navigate fields"
                    FontSize="12"
                    FontStyle="Italic"/>
 
-        <TextBlock Text="'Shift+Tab' to go to previous field"
-                   FontSize="12"
-                   FontStyle="Italic"/>
+        <Grid Grid.Row="1"
+              ColumnDefinitions="*,*"
+              RowDefinitions="Auto,Auto,Auto,Auto"
+              ColumnSpacing="10"
+              RowSpacing="10">
 
-        <TextBlock Text="Barcode Count" />
-        <TextBox TextChanged="OnTextChanged_ClearStrings"
-                 Text="{Binding BarcodeCount}"/>
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="Barcode Count"/>
+            <TextBlock Grid.Row="0" Grid.Column="1" Text="Bases Length"/>
 
-        <TextBlock Text="Bases Length" />
-        <TextBox TextChanged="OnTextChanged_ClearStrings"
-                 Text="{Binding BasesLength}"/>
+            <TextBox Grid.Row="1" Grid.Column="0"
+                     Text="{Binding BarcodeCount}"
+                     TextChanged="OnTextChanged_ClearStrings"/>
 
-        <TextBlock Text="Anti-Complementary Length" />
-        <TextBox TextChanged="OnTextChanged_ClearStrings"
-                 Text="{Binding AntiComplementaryLength}"/>
+            <TextBox Grid.Row="1" Grid.Column="1"
+                     Text="{Binding BasesLength}"
+                     TextChanged="OnTextChanged_ClearStrings"/>
 
-        <TextBlock Text="GC Percentage" />
-        <TextBox TextChanged="OnTextChanged_ClearStrings"
-                 Text="{Binding Percentage}"/>
+            <TextBlock Grid.Row="2" Grid.Column="0" Text="Anti-Complementary Length"/>
+            <TextBlock Grid.Row="2" Grid.Column="1" Text="Percentage"/>
 
-        <StackPanel Spacing="10">
-            <Button Content="Select folder" 
-                    Click="OpenFileButton_Clicked"/>
+            <TextBox Grid.Row="3" Grid.Column="0"
+                     Text="{Binding AntiComplementaryLength}"
+                     TextChanged="OnTextChanged_ClearStrings"/>
+
+            <TextBox Grid.Row="3" Grid.Column="1"
+                     Text="{Binding Percentage}"
+                     TextChanged="OnTextChanged_ClearStrings"/>
+        </Grid>
+
+        <StackPanel Grid.Row="2" Spacing="5">
+            <TextBlock Text="Excel Path"/>
+
+            <Grid ColumnDefinitions="*,Auto"
+                  ColumnSpacing="10">
+
+                <TextBox Grid.Column="0"
+                         x:Name="FolderPathBox"
+                         Text="{Binding FolderPath}"/>
+
+                <Button Grid.Column="1"
+                        Width="32"
+                        Height="32"
+                        Click="OpenFileButton_Clicked">
+                    <Image Source="avares://BarcodeGenerator/Assets/folder.png"/>
+                </Button>
+            </Grid>
         </StackPanel>
 
-        <Button Content="Generate"
-                Focusable="False"
-                Command="{Binding GenerateCommand}"
-                HorizontalAlignment="Left"/>
+        <Grid Grid.Row="3"
+              ColumnDefinitions="Auto,*"
+              ColumnSpacing="10">
 
-        <TextBlock Text="{Binding Status}"
-                   Focusable="False"
-                   Height="40"/>
+            <Button Grid.Column="0"
+                    Content="Generate and Save"
+                    Command="{Binding GenerateCommand}"
+                    Focusable="False"
+                    VerticalAlignment="Top"/>
 
-    </StackPanel>
+            <TextBlock Grid.Column="1"
+                       VerticalAlignment="Center"
+                       Text="{Binding Status}"
+                       Focusable="False"
+                       TextWrapping="Wrap"/>
+        </Grid>
 
+    </Grid>
 </Window>
