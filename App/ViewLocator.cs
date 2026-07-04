@@ -1,10 +1,10 @@
+using App.ViewModels;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using System;
 using System.Diagnostics.CodeAnalysis;
-using UI.ViewModels;
 
-namespace UI
+namespace App
 {
 	/// <summary>
 	/// Given a view model, returns the corresponding view if possible.

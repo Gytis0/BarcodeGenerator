@@ -1,0 +1,175 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:App.ViewModels"
+        x:Class="App.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        XYFocus.NavigationModes="Keyboard"
+        Width="540"
+        MinWidth="540"
+        Height="600"
+        MinHeight="600"
+        MaxHeight="600"
+        Icon="/Assets/rna.ico"
+        Title="Barcode Generator">
+
+    <Grid Margin="20"
+          RowDefinitions="Auto,Auto,Auto,Auto,*"
+          RowSpacing="15">
+
+        <TextBlock Grid.Row="0"
+                   Text="'Tab', 'Shift+Tab' or 'Arrow keys' to navigate fields"
+                   FontSize="12"
+                   FontStyle="Italic"/>
+
+        <Grid Grid.Row="1"
+              ColumnDefinitions="*,*"
+              RowDefinitions="Auto,68,Auto,68"
+              ColumnSpacing="10"
+              RowSpacing="10">
+
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="Barcode Count"/>
+            <TextBlock Grid.Row="0" Grid.Column="1" Text="Bases Length"/>
+
+            <TextBox Grid.Row="1" Grid.Column="0" MinHeight="32" VerticalAlignment="Top"
+                     Text="{Binding BarcodeCount}"
+                     TextChanged="OnTextChanged_ClearStrings"
+                     MaxLength="15">
+                <ToolTip.Tip>
+                    How many barcodes to generate?
+                </ToolTip.Tip>
+            </TextBox>
+
+            <TextBox Grid.Row="1" Grid.Column="1" MinHeight="32" VerticalAlignment="Top"
+                     Text="{Binding BarcodeLength}"
+                     TextChanged="OnTextChanged_ClearStrings"
+                     MaxLength="15">
+                <ToolTip.Tip>
+                    How long should a single barcode be?
+                </ToolTip.Tip>
+            </TextBox>
+
+            <TextBlock Grid.Row="2" Grid.Column="0" Text="Anti-Complementary Length"/>
+            <TextBlock Grid.Row="2" Grid.Column="1" Text="Percentage of GC"/>
+
+            <TextBox Grid.Row="3" Grid.Column="0" MinHeight="32" VerticalAlignment="Top"
+                     Text="{Binding AntiComplementaryLength}"
+                     TextChanged="OnTextChanged_ClearStrings"
+                     MaxLength="15">
+                <ToolTip.Tip>
+                    How many bases from the start and the end should not be complementary?
+                </ToolTip.Tip>
+            </TextBox>
+
+            <TextBox Grid.Row="3" Grid.Column="1" MinHeight="32" VerticalAlignment="Top"
+                     Text="{Binding Percentage}"
+                     TextChanged="OnTextChanged_ClearStrings"
+                     MaxLength="15">
+                <ToolTip.Tip>
+                    What percentage of the bases should be consisted of 'G' and 'C'?
+                </ToolTip.Tip>
+            </TextBox>
+        </Grid>
+
+        <StackPanel Grid.Row="2" Spacing="5">
+            <TextBlock Text="Insert Genomic Sequence"/>
+            <TextBox PlaceholderText="Sequence..."
+                     Text="{Binding InsertGenomicSequence}"
+                     Height="96"
+                     TextWrapping="Wrap">
+            <ToolTip.Tip>
+                Insert Genomic Sequence for preventing duplicates
+            </ToolTip.Tip>
+            </TextBox>
+        </StackPanel>
+
+        <StackPanel Grid.Row="3" Spacing="5">
+            <TextBlock Text="Excel Path"/>
+
+            <Grid ColumnDefinitions="*,Auto, Auto"
+                  RowDefinitions="Auto,Auto"
+                  ColumnSpacing="10"
+                  RowSpacing="5">
+
+                <TextBox Grid.Row="0"
+                         Grid.Column="0"
+                         x:Name="ExcelPathBox"
+                         Text="{Binding ExcelPath}"
+                         Height="32">
+                    <ToolTip.Tip>
+                        Path to the excel.
+                    </ToolTip.Tip>
+                </TextBox>
+
+                <Button Grid.Row="0"
+                        Grid.Column="1"
+                        Width="32"
+                        Height="32"
+                        Click="OnButtonClick_OpenFileDialog">
+                    <ToolTip.Tip>
+                        Select an existing excel file.
+                    </ToolTip.Tip>
+                    <Image Source="avares://App/Assets/file-spreadsheet.png"/>
+                </Button>
+
+                <Button Grid.Row="0"
+                        Grid.Column="2"
+                        Width="32"
+                        Height="32"
+                        Click="OnButtonClick_OpenFolderDialog">
+                    <ToolTip.Tip>
+                        Select an output folder.
+                    </ToolTip.Tip>
+                    <Image Source="avares://App/Assets/folder.png"/>
+                </Button>
+
+                <StackPanel Grid.Row="1"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="2"
+                            Orientation="Horizontal"
+                            Spacing="20">
+                    <CheckBox x:Name="CheckBox_Overwrite"
+                              Content="Overwrite"
+                              IsChecked="{Binding IsOverwrite}"
+                              Click="OnCheckBoxTick_CheckLogic">
+                        <ToolTip.Tip>
+                            If this excel file exists, should it be overwritten?
+                        </ToolTip.Tip>
+                    </CheckBox>
+
+                    <CheckBox x:Name="CheckBox_Append"
+                              Content="Append"
+                              IsChecked="{Binding IsAppend}"
+                              Click="OnCheckBoxTick_CheckLogic">
+                        <ToolTip.Tip>
+                            If this excel file exists, should the sequences be appended to it?
+                        </ToolTip.Tip>
+                    </CheckBox>
+                </StackPanel>
+            </Grid>
+
+        </StackPanel>
+
+        <Grid Grid.Row="4"
+              ColumnDefinitions="Auto,*"
+              ColumnSpacing="10">
+
+            <Button Grid.Column="0" x:Name="Button_Generate"
+                    Content="Read, Generate and Create"
+                    IsEnabled="True"
+                    Command="{Binding GenerateCommand}"
+                    Focusable="False"
+                    VerticalAlignment="Top">
+            <ToolTip.Tip>
+                If this excel exists, read it first. Then generate new sequences that would not duplicate with the existing excel and create a new excel.
+            </ToolTip.Tip>
+            </Button>
+
+            <TextBlock Grid.Column="1"
+                       VerticalAlignment="Top"
+                       Text="{Binding Status}"
+                       Focusable="False"
+                       TextWrapping="Wrap"/>
+        </Grid>
+
+    </Grid>
+</Window>

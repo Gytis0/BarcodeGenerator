@@ -1,7 +1,7 @@
 ﻿using Avalonia;
 using System;
 
-namespace UI
+namespace App
 {
 	internal sealed class Program
 	{
@@ -17,7 +17,7 @@ namespace UI
 			=> AppBuilder.Configure<App>()
 				.UsePlatformDetect()
 #if DEBUG
-	            .WithDeveloperTools()
+				.WithDeveloperTools()
 #endif
 				.WithInterFont()
 				.LogToTrace();

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace UI.Attributes
+namespace App.Attributes
 {
 	internal class IsIntAttribute : ValidationAttribute
 	{
