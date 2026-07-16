@@ -100,16 +100,17 @@ public partial class SequenceSplittingViewModel : ObservableValidator
 
 			HashSet<string> endings = [];
 			StringBuilder sb = new StringBuilder();
-			foreach(var sequence in Sequences)
+			foreach (var sequence in Sequences)
 			{
-				if(string.IsNullOrWhiteSpace(sequence.Name) && string.IsNullOrWhiteSpace(sequence.Sequence))
+				if (string.IsNullOrWhiteSpace(sequence.Name) && string.IsNullOrWhiteSpace(sequence.Sequence))
 					continue;
 
-				var result = SequenceSplitter.SplitSequenceGreedy_OffsetBy4(sequence.Sequence, Parts, MaxLengthDifference, endings);
+				var result = SequenceSplitter.SplitSequence_Bipartite_OffsetBy4(sequence.Sequence, Parts, MaxLengthDifference, endings);
 				var adjusted = SequenceSplitter.ManuallyAddBases(result.output);
-				sb.AppendLine(sequence.Name);
-				foreach(var part in adjusted)
+				foreach (var part in adjusted)
 					sb.AppendLine(part);
+				sb.AppendLine();
+
 				foreach (var ending in result.existingEndings)
 					endings.Add(ending);
 			}
