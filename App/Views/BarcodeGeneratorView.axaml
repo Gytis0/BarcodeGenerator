@@ -1,0 +1,245 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:App.ViewModels"
+             x:DataType="vm:BarcodeGeneratorViewModel"
+             x:Class="App.Views.BarcodeGeneratorView"
+             XYFocus.NavigationModes="Keyboard"
+             MinHeight="650">
+
+    <DockPanel Margin="20"
+               LastChildFill="True">
+
+        <!-- Bottom section -->
+        <StackPanel DockPanel.Dock="Bottom"
+                    Spacing="15">
+
+            <StackPanel Orientation="Horizontal"
+                        Spacing="20">
+
+                <RadioButton x:Name="Radio_Create"
+                             GroupName="SaveMode"
+                             Content="Create"
+                             IsChecked="True"
+                             IsCheckedChanged="OnRadioButtonClick_Logic">
+                    <ToolTip.Tip>
+                        Generate new sequences. Create new Excel file.
+                    </ToolTip.Tip>
+                </RadioButton>
+
+                <RadioButton x:Name="Radio_ReadCreate"
+                             GroupName="SaveMode"
+                             Content="Read and Create"
+                             IsCheckedChanged="OnRadioButtonClick_Logic">
+                    <ToolTip.Tip>
+                        Read an existing excel file's sequences. Generate new sequences that would not duplicate with existing sequences. Create new excel file.
+                    </ToolTip.Tip>
+                </RadioButton>
+
+                <RadioButton x:Name="Radio_Append"
+                             GroupName="SaveMode"
+                             Content="Append"
+                             IsCheckedChanged="OnRadioButtonClick_Logic">
+                    <ToolTip.Tip>
+                        Read an existing excel file's sequences. Generate new sequences that would not duplicate with existing sequences. Add newly generated sequences to the existing sequences in the same excel file.
+                    </ToolTip.Tip>
+                </RadioButton>
+
+            </StackPanel>
+
+
+
+            <Grid ColumnDefinitions="Auto, Auto, *"
+                  ColumnSpacing="10">
+
+                <Button Grid.Column="0"
+                        x:Name="Button_Generate"
+                        Content="Generate"
+                        IsEnabled="True"
+                        Command="{Binding GenerateCommand}"
+                        Focusable="False">
+                    <ToolTip.Tip>
+                        Generate sequences based on selected mode.
+                    </ToolTip.Tip>
+                </Button>
+
+                <Button Grid.Column="1"
+                        x:Name="Button_Open"
+                        Content="Open Folder"
+                        Click="OnButtonClick_OpenExplorer"
+                        IsEnabled="True"
+                        Focusable="False">
+                    <ToolTip.Tip>
+                        Opens the latest updated file.
+                    </ToolTip.Tip>
+                </Button>
+
+                <TextBlock Grid.Column="2"
+                           Text="{Binding Status}"
+                           Focusable="False"
+                           TextWrapping="Wrap"/>
+            </Grid>
+
+        </StackPanel>
+
+        <!-- Main content -->
+        <StackPanel Spacing="15">
+
+            <TextBlock Text="'Tab', 'Shift+Tab' or 'Arrow keys' to navigate fields"
+                       FontSize="12"
+                       FontStyle="Italic"/>
+
+            <Grid ColumnDefinitions="*,*"
+                  RowDefinitions="Auto,68,Auto,68"
+                  ColumnSpacing="10"
+                  RowSpacing="10">
+
+                <TextBlock Grid.Row="0"
+                           Grid.Column="0"
+                           Text="Barcode Count"/>
+
+                <TextBlock Grid.Row="0"
+                           Grid.Column="1"
+                           Text="Bases Length"/>
+
+                <TextBox Grid.Row="1"
+                         Grid.Column="0"
+                         MinHeight="32"
+                         VerticalAlignment="Top"
+                         Text="{Binding BarcodeCount}"
+                         TextChanged="OnTextChanged_ClearStrings"
+                         MaxLength="15">
+                    <ToolTip.Tip>
+                        How many barcodes to generate?
+                    </ToolTip.Tip>
+                </TextBox>
+
+                <TextBox Grid.Row="1"
+                         Grid.Column="1"
+                         MinHeight="32"
+                         VerticalAlignment="Top"
+                         Text="{Binding BarcodeLength}"
+                         TextChanged="OnTextChanged_ClearStrings"
+                         MaxLength="15">
+                    <ToolTip.Tip>
+                        How long should a single barcode be?
+                    </ToolTip.Tip>
+                </TextBox>
+
+                <TextBlock Grid.Row="2"
+                           Grid.Column="0"
+                           Text="Anti-Complementary Length"/>
+
+                <TextBlock Grid.Row="2"
+                           Grid.Column="1"
+                           Text="Percentage of GC"/>
+
+                <TextBox Grid.Row="3"
+                         Grid.Column="0"
+                         MinHeight="32"
+                         VerticalAlignment="Top"
+                         Text="{Binding AntiComplementaryLength}"
+                         TextChanged="OnTextChanged_ClearStrings"
+                         MaxLength="15">
+                    <ToolTip.Tip>
+                        How many bases from the start and the end should not be complementary?
+                    </ToolTip.Tip>
+                </TextBox>
+
+                <TextBox Grid.Row="3"
+                         Grid.Column="1"
+                         MinHeight="32"
+                         VerticalAlignment="Top"
+                         Text="{Binding Percentage}"
+                         TextChanged="OnTextChanged_ClearStrings"
+                         MaxLength="15">
+                    <ToolTip.Tip>
+                        What percentage of the bases should be consisted of 'G' and 'C'?
+                    </ToolTip.Tip>
+                </TextBox>
+
+            </Grid>
+
+            <StackPanel Spacing="5">
+
+                <TextBlock Text="Insert Genomic Sequence"/>
+
+                <TextBox PlaceholderText="Sequence..."
+                         Text="{Binding InsertGenomicSequence}"
+                         Height="96"
+                         TextWrapping="Wrap">
+                    <ToolTip.Tip>
+                        Insert Genomic Sequence to prevent duplicates
+                    </ToolTip.Tip>
+                </TextBox>
+
+            </StackPanel>
+
+            <Grid RowDefinitions="Auto,Auto,*"
+                  RowSpacing="5">
+
+                <TextBlock Grid.Row="0"
+                           Name="FirstTextLabel"
+                           Text="Where to create new Excel?"/>
+
+                <Grid Grid.Row="1"
+                      ColumnDefinitions="*,Auto"
+                      ColumnSpacing="10">
+
+                    <TextBox Grid.Column="0"
+                             x:Name="FirstTextField"
+                             Text="{Binding ExcelPath}"
+                             Height="32"/>
+
+                    <Button Grid.Column="1"
+                            Width="32"
+                            Height="32"
+                            IsVisible="False"
+                            Name="Button_OpenFileDialog"
+                            Click="OnButtonClick_OpenFileDialog_FirstTextBox">
+                        <Image Source="avares://App/Assets/file-spreadsheet.png"/>
+                    </Button>
+
+                    <Button Grid.Column="1"
+                            Width="32"
+                            Height="32"
+                            IsVisible="True"
+                            Name="Button_OpenFolderDialog"
+                            Click="OnButtonClick_OpenFolderDialog">
+                        <Image Source="avares://App/Assets/folder.png"/>
+                    </Button>
+
+                </Grid>
+
+                <StackPanel Grid.Row="2"
+                            x:Name="CreateNewPanel"
+                            VerticalAlignment="Top"
+                            IsVisible="False"
+                            Spacing="5">
+
+                    <TextBlock Text="Which Excel to read?"
+                               Name="SecondTextLabel"/>
+
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                        <TextBox Grid.Column="0"
+                                 x:Name="SecondTextField"
+                                 Text="{Binding ReadFilePath}"
+                                 Watermark="UMI.xlsx"/>
+
+                        <Button Grid.Column="1"
+                                Width="32"
+                                Height="32"
+                                VerticalAlignment="Top"
+                                Click="OnButtonClick_OpenFileDialog_SecondTextBox">
+                            <Image Source="avares://App/Assets/file-spreadsheet.png"/>
+                        </Button>
+                    </Grid>
+
+                </StackPanel>
+
+            </Grid>
+
+        </StackPanel>
+
+    </DockPanel>
+
+</UserControl>

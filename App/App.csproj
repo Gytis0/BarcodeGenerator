@@ -9,7 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
     <AvaloniaResource Include="Assets\**" />
   </ItemGroup>
 
@@ -27,5 +26,14 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Views\BarcodeGeneratorView.axaml.cs">
+      <DependentUpon>BarcodeGeneratorView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\SequenceSplittingView.axaml.cs">
+      <DependentUpon>SequenceSplittingView.axaml</DependentUpon>
+    </Compile>
   </ItemGroup>
 </Project>
