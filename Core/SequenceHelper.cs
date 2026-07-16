@@ -22,6 +22,21 @@ public static class SequenceHelper
 	{
 		string text = Encoding.ASCII.GetString(File.ReadAllBytes(path));
 
+		if (Regex.IsMatch(text, @"\bLOCUS\b.*\bORIGIN\b", RegexOptions.Singleline | RegexOptions.IgnoreCase))
+		{
+			Match origin = Regex.Match(text, @"\bORIGIN\b(?<seq>.*?)(?://)", RegexOptions.Singleline | RegexOptions.IgnoreCase);
+
+			if (!origin.Success)
+				throw new InvalidDataException("No DNA sequence found.");
+
+			string sequence = Regex.Replace(origin.Groups["seq"].Value, @"[^ACGT]", "", RegexOptions.IgnoreCase);
+
+			if (sequence.Length == 0)
+				throw new InvalidDataException("No DNA sequence found.");
+
+			return sequence;
+		}
+
 		Match match = Regex.Match(text, "[ACGT]{20,}", RegexOptions.IgnoreCase);
 
 		if (!match.Success)

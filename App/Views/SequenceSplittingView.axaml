@@ -65,6 +65,7 @@
                         <TextBlock Text=""
                                    VerticalAlignment="Center"
                                    TextWrapping="Wrap"
+                                   Background="DarkRed"
                                    Name="Status"/>
 
                     </StackPanel>

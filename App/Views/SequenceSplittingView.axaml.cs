@@ -83,6 +83,8 @@ public partial class SequenceSplittingView : UserControl
 
 			foreach (var tuple in fileTuples)
 				vm.AddSequence(tuple.Item1, tuple.Item2);
+
+			Status.Text = "";
 		}
 		catch (Exception ex)
 		{
